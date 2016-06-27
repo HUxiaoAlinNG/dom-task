@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DOM单元作业2</title>
+</head>
+<body>
+ <script type="text/javascript">
+	function getCookies () {
+    	var cookie = {};
+    	var allcookies = document.cookie; //得到文档cookie
+    	if (allcookies === '')
+        	return cookie; //若cookie为空，则返回''
+    	var list = allcookies.split(';'); //将cookie通过';'进行分组并建立新数组
+    	for (var i = 0; i < list.length; i++) {
+        	var item = list[i];
+        	var p = item.indexOf('=');//检索'='在item数组里面的位置
+       	 	var name = item.substring(0, p);//取得'='前面字符
+        	name = decodeURIComponent(name);//对name字符串进行解码
+        	var value = item.substring(p + 1);//取得'='后面字符
+        	value = decodeURIComponent(value);//对value字符串进行解码
+        	cookie[name] = value;
+    	}
+    	return cookie;
+	}
+	getCookies();
+</script>
+</body>
+</html>

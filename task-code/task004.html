@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<title>如何实现一个日期下拉菜单</title> 
+<script event="text/javascript"> 
+  //创建addHandler兼容函数，选择addEventListener或attachEvent方法
+  function addHandler(element,event,func){
+    if(element.addEventListener){
+      return element.addEventListener(event,func);
+    }else if(element.attachEvent){
+      return element.attachEvent('on'+event,func);
+    }
+  }
+    addHandler(window,'load',function(){
+        var getYear=document.getElementById('year');
+        var getMonth=document.getElementById('month');
+        var getDate=document.getElementById('date');
+        //构造getDays函数用于得到某年某月的总天数
+        function getDays(year,month){
+          return new Date(year,month,0).getDate();
+        }
+        //构造addDays函数
+        function addDays(element,index){                
+            if(element.options[index].selected){
+                getDate.options.length=1;  //getDate原始长度为1（即值为0）
+                    if(index==0){  
+                        if(element.id=='year'){//“年”下拉选择框为初始状态（即值为0）时 ，“月”、“日”下拉选择框迅速返回为初始状态（即值为0）
+                            getMonth.options[0].selected=true;
+                            getDate.options[0].selected=true;
+                        }
+                        if(element.id=='month'){//“月”下拉选择框为初始状态（即值为0）时 ，“日”下拉选择框迅速返回为初始状态（即值为0）
+                            getDate.options[0].selected=true;
+                        }
+                        return;                
+                    }
+                var year=getYear.options[getYear.selectedIndex].value; 
+                if(year==0)return;//“年”下拉选择框为初始状态（即值为0）时，其他月日为初始状态
+                var month=getMonth.options[getMonth.selectedIndex].value;
+                if(month==0)return;//“月”下拉选择框为初始状态（即值为0）时，其他月日为初始状态
+                var date=getDays(year,month);
+                for(var j=1;j<=date;j++){  //在date的选择框下创建并创建新节点option,并在option下赋值
+                    var opt = document.createElement('option');  
+                    opt.appendChild(document.createTextNode(''+j));  
+                    opt.setAttribute('value',''+j);  
+                    getDate.appendChild(opt);  
+                }
+            }                    
+        }
+            //“年”选择框变化时，“日”选择框数值变化
+            addHandler(getYear,'change',function(){
+                for(var i=0;i<=3;i++){
+                    addDays(this,i);
+                }
+            });
+            //“月”选择框变化时，“日”选择框数值变化
+            addHandler(getMonth,'change',function(){
+                for(var i=0;i<=12;i++){
+                    addDays(this,i);
+                }
+            });
+ 
+        });
+    </script>
+</script> 
+</head> 
+<body> 
+    <select name="year" id="year">
+        <option value="0">--</option>
+        <option value="1999">1999</option>
+        <option value="2000">2000</option>
+        <option value="2001">2001</option>
+    </select>年
+    <select name="month" id="month">
+        <option value="0">--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select>月
+    <select name="date" id="date">
+        <option value="0">--</option>
+    </select>日
+</body> 
+</html>

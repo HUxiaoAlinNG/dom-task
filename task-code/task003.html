@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DOM单元作业3</title>
+<style>
+#demo div.box {float:left;width:31%;margin:0 1%;}
+#demo div.box h2{margin-bottom:10px}
+#demo div.box h2 input{padding:5px 8px;font-size:14px;font-weight:bolder}
+#demo div.box div{text-indent:10px; line-height:22px;border:2px solid #555;padding:0.5em;overflow:hidden;background-color: grey}
+</style>
+<script type="text/javascript">
+window.onload = function(){
+  //直接取Id
+    var getId = {
+        Id: function(name){
+            return document.getElementById(name);
+        },
+    //设置元素透明度,透明度值0到1;兼容IE浏览器
+        SetOpacity: function(ev, value){
+            ev.filters ? ev.style.filter = 'alpha(opacity=' + 100*value + ')' : ev.style.opacity = value;
+        }
+    }
+  //淡出效果(含淡出到指定透明度)
+  function fadeout(elem){
+      var val = 1;
+    //循环将透明值以0.1递减,即淡出效果
+      (function(){
+          getId.SetOpacity(elem,val);
+          val-=0.1;         
+          if (val >= 0) {
+              setInterval(arguments.callee,100); //取得getId.SetOpacity(elem,val)执行函数
+          }else{
+        //元素透明度为0后隐藏元素
+              elem.style.display = 'none';
+          }
+      })();
+  }
+  //验证   
+    var btns = getId.Id('demo').getElementsByTagName('input')[0];
+    btns.onclick = function(){
+        fadeout(getId.Id('fadeOut'));
+    }    
+}
+</script>
+</head>
+<body>
+<div id="demo">
+  <div class="box">
+    <h2><input type="button" value="点击淡出" /></h2>
+    <div id="fadeOut">
+      <p>函数fadeout(element)实现了元素的淡出效果（即透明度从1变到0），动画时间为1秒钟。</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
